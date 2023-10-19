@@ -1,47 +1,65 @@
 package Desafio;
 
-import java.util.Arrays;
-
+import java.lang.StringBuilder;
 import javax.swing.JOptionPane;
 
 public class Urna {
     public static void main(String[] args) {
-        final String[] nomeCand = { "Ricardo Nunes", "Vinícius Poit", "Tábata Amaral", "Kim Kataguiri",
+        final String nomeCand[] = { "Ricardo Nunes", "Vinícius Poit", "Tábata Amaral", "Kim Kataguiri",
                 "Guilherme Boulos" };
-        String listaCand = "";
-        Integer[] votosCand = { 0, 0, 0, 0, 0 };
-        Integer[] idxs = new Integer[nomeCand.length];
-        int votosInvalidos = 0;
-        int voto;
-        char ctrlVoto = 'V';
+
+        int qtdVotos[] = { 0, 0, 0, 0, 0 }, voto, votosInv = 0, totalVotos = 0, controle;
+        StringBuilder listaCand = new StringBuilder();
+        StringBuilder resultado = new StringBuilder();
+
         for (int i = 0; i < nomeCand.length; i++) {
-            listaCand += idxs[i] + " - " + nomeCand[i] + "\n";
+            listaCand.append(i + " - " + nomeCand[i] + "\n");
         }
 
         do {
-            ctrlVoto = JOptionPane.showInputDialog("Digite \"V\" para votar ou \"E\" para encerrar:").charAt(0);
-            if (ctrlVoto == 'V') {
-                voto = Integer.parseInt(JOptionPane.showInputDialog(
-                        "Lista de candidatos: \n" + listaCand + "Para votar, digite o número do seu candidato:"));
-                if (voto < votosCand.length) {
-                    for (int i = 0; i < nomeCand.length; i++) {
-                        if (voto == idxs[i]) {
-                            votosCand[i] += 1;
-                        }
-                    }
+            controle = JOptionPane.showConfirmDialog(null, "Deseja votar?", "Sistema de votação",
+                    JOptionPane.YES_NO_OPTION);
+            if (controle == JOptionPane.YES_OPTION) {
+                voto = Integer.parseInt(JOptionPane.showInputDialog(null,
+                        "Lista de candidatos: \n" + listaCand.toString() + "Digite o número do candidato.",
+                        "Sistema de votação", JOptionPane.QUESTION_MESSAGE));
+                totalVotos += 1;
+                if ((voto >= 0) && voto < (nomeCand.length)) {
+                    qtdVotos[voto] += 1;
                 } else {
-                    votosInvalidos += 1;
+                    votosInv += 1;
                 }
-            } else if (ctrlVoto == 'E') {
-                String res = "";
-                for (int i = 0; i < nomeCand.length; i++) {
-                    res += nomeCand[i] + " - " + votosCand[i] + " voto(s).\n";
-                }
-                JOptionPane.showMessageDialog(null, "Resultado: \n" + res + "Votos inválidos: " + votosInvalidos + ".");
+                JOptionPane.showMessageDialog(null, "Voto registrado!", "Sistema de Votação",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else if (controle == JOptionPane.NO_OPTION) {
+                break;
             } else {
-                JOptionPane.showMessageDialog(null, "Opção inválida!");
+                System.exit(0);
             }
 
-        } while (ctrlVoto == 'V');
+        } while (controle == JOptionPane.YES_OPTION);
+
+        for (int i = 0; i < qtdVotos.length - 1; i++) {
+            for (int j = 0; j < qtdVotos.length - i - 1; j++) {
+                if (qtdVotos[j] < qtdVotos[j + 1]) {
+                    int tempV = qtdVotos[j];
+                    qtdVotos[j] = qtdVotos[j + 1];
+                    qtdVotos[j + 1] = tempV;
+
+                    String tempN = nomeCand[j];
+                    nomeCand[j] = nomeCand[j + 1];
+                    nomeCand[j + 1] = tempN;
+                }
+            }
+        }
+
+        for (int i = 0; i < nomeCand.length; i++) {
+            resultado.append(nomeCand[i] + ": " + qtdVotos[i] + " voto(s).\n");
+        }
+
+        JOptionPane.showMessageDialog(null,
+                "Resultado da eleição: \nTotal de votos: " + totalVotos + " voto(s).\n\n" + resultado.toString()
+                        + "\nVoto(s) inválido(s): " + votosInv + ".",
+                "Sistema de Votação", JOptionPane.INFORMATION_MESSAGE);
     }
 }
