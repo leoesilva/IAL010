@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 
 public class Urna {
     public static void main(String[] args) {
-        final String nomeCand[] = { "Ricardo Nunes", "Vinícius Poit", "Tábata Amaral", "Kim Kataguiri",
+        String nomeCand[] = { "Ricardo Nunes", "Vinícius Poit", "Tábata Amaral", "Kim Kataguiri",
                 "Guilherme Boulos" };
 
         int qtdVotos[] = { 0, 0, 0, 0, 0 }, voto, votosInv = 0, totalVotos = 0, controle;
@@ -17,7 +17,7 @@ public class Urna {
         }
 
         do {
-            controle = JOptionPane.showConfirmDialog(null, "Deseja votar?", "Sistema de votação",
+            controle = JOptionPane.showConfirmDialog(null, "Deseja seguir com a votação?", "Sistema de votação",
                     JOptionPane.YES_NO_OPTION);
             if (controle == JOptionPane.YES_OPTION) {
                 voto = Integer.parseInt(JOptionPane.showInputDialog(null,
@@ -54,7 +54,7 @@ public class Urna {
         }
 
         for (int i = 0; i < nomeCand.length; i++) {
-            resultado.append(nomeCand[i] + ": " + qtdVotos[i] + " voto(s).\n");
+            resultado.append(i+1 + "º - " + nomeCand[i] + ": " + qtdVotos[i] + " voto(s).\n");
         }
 
         JOptionPane.showMessageDialog(null,
